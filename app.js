@@ -7,6 +7,12 @@ const darkModeToggle = document.getElementById("dark-mode-toggle");
 // Initialize task array
 let tasks = [];
 
+// Load tasks from localStorage
+if (localStorage.getItem("tasks")) {
+  tasks = JSON.parse(localStorage.getItem("tasks"));
+  renderTasks();
+}
+
 // Add event listener to add button
 addBtn.addEventListener("click", () => {
   if (taskInput.value !== "") {
@@ -28,6 +34,7 @@ function addTask(taskText) {
     completed: false,
   };
   tasks.push(task);
+  saveTasks();
   renderTasks();
 }
 
@@ -78,12 +85,19 @@ function toggleTaskCompleted(id) {
     }
     return task;
   });
+  saveTasks();
 }
 
 // Delete task from array and list
 function deleteTask(id) {
   tasks = tasks.filter((task) => task.id !== id);
+  saveTasks();
   renderTasks();
+}
+
+// Save tasks to localStorage
+function saveTasks() {
+  localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
 // Add event listener to task input
